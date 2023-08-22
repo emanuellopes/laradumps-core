@@ -1,8 +1,10 @@
 <?php
 
 use LaraDumps\LaraDumps\LaraDumps as LaravelLaraDumps;
+
 use LaraDumps\LaraDumpsCore\LaraDumps;
 use Ramsey\Uuid\Uuid;
+use WordPressDumps\WordPressDumps\WordPressDumps;
 
 if (!function_exists('appBasePath')) {
     function appBasePath(): string
@@ -32,6 +34,16 @@ if (!function_exists('ds')) {
 
         if (class_exists(LaravelLaraDumps::class) && function_exists('app')) {
             $laradumps = app(LaravelLaraDumps::class);
+
+            $sendRequest($args, $laradumps);
+
+            return $laradumps;
+        }
+
+        if (class_exists(WordPressDumps::class)) {
+            $laradumps = new WordPressDumps(
+                notificationId: Uuid::uuid4()->toString(),
+            );
 
             $sendRequest($args, $laradumps);
 
